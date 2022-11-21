@@ -3,12 +3,22 @@ const router = express.Router();
 
 const { newId, updatedList } = require("../utilities/utilities");
 
+// sample warehouses for testing
 const warehouses = [
   {
     id: 1,
-    location: "test",
+    location: "kaslo",
   },
 ];
+
+// sample items for testing
+const items = [
+  {
+    id: 1,
+    item: "keyboard",
+  },
+];
+
 // API: .GET list all warehouses
 router.get("/", (_req, res) => {
   try {
@@ -62,8 +72,16 @@ router.patch("/:id", (req, res) => {
 
 //
 // API: .GET all inventory items
+router.get("/", (_req, res) => {
+  try {
+    res.status(200).json(warehouses);
+  } catch (error) {
+    console.log("Error getting warehouse list", error);
+  }
+});
 
 // API: .GET single item details
+
 
 // API: .GET inventories for warehouse (by warehouse id?)
 

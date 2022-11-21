@@ -11,7 +11,8 @@ app.use(cors())
 app.use(express.json());
 
 // routes for warehouse resource
-app.use('/warehouses', warehouseRouter)
+app.use('/', warehouseRouter)
+
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
