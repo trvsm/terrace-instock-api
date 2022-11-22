@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
+const cors = require("cors");
 
-const warehouseRoutes = require("./routes/warehouseRoute");
+// setup middleware: CORS for client requests, express.json to handle data
+app.use(cors());
+app.use(express.json());
 
 // home page
 app.get("/", (req, res) => {
@@ -12,31 +15,13 @@ app.get("/", (req, res) => {
 });
 
 // all warehouses routes
+const warehouseRoutes = require("./routes/warehouseRoute");
 app.use("/warehouses", warehouseRoutes);
+
+// all inventory routes
+const inventoryRoutes = require("./routes/inventoryRoute");
+app.use("/inventories", inventoryRoutes);
 
 app.listen(PORT, () => {
   console.log(`running at http://localhost:${PORT}`);
 });
-// setup dotenv to support ports by run environment
-// const path = require("node:path");
-// require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
-
-// // initialize express server
-// const express = require("express");
-// const app = express();
-
-// const warehouseRouter = require("./routes/warehouses");
-// const inventoryRouter = require("./routes/inventory");
-
-// // setup middleware: CORS for client requests, express.json to handle data
-// app.use(cors());
-// app.use(express.json());
-
-// // routes for warehouse resource
-// app.use("/warehouses", warehouseRouter);
-// app.use("/inventory", inventoryRouter);
-
-// const PORT = process.env.PORT;
-// app.listen(PORT, () => {
-//   console.log(`server running: ${PORT}`);
-// });
