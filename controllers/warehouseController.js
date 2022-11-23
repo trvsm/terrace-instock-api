@@ -47,7 +47,7 @@ exports.warehouseInventories = (req, res) => {
     );
 };
 exports.addWarehouse = (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   // Validate the request body for required data
   if (
     !req.body.warehouse_name ||
