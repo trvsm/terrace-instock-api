@@ -1,5 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 const { v4: uuidv4 } = require("uuid");
+const { isPhoneValid, isEmailValid } = require("../utilities/utilities");
 
 exports.index = (_req, res) => {
   knex("warehouses")
@@ -47,7 +48,7 @@ exports.warehouseInventories = (req, res) => {
     );
 };
 exports.addWarehouse = (req, res) => {
-  // console.log(req.body);
+
   // Validate the request body for required data
   if (
     !req.body.warehouse_name ||
@@ -56,8 +57,8 @@ exports.addWarehouse = (req, res) => {
     !req.body.country ||
     !req.body.contact_name ||
     !req.body.contact_position ||
-    !req.body.contact_phone ||
-    !req.body.contact_email
+    !isPhoneValid(req.body.contact_phone) ||
+    !isEmailValid(req.body.contact_email)
   ) {
     return res
       .status(400)
@@ -79,6 +80,22 @@ exports.addWarehouse = (req, res) => {
     .catch((err) => res.status(400).send(`Error creating Warehouse: ${err}`));
 };
 exports.updateWarehouse = (req, res) => {
+    if (
+      !req.body.warehouse_name ||
+      !req.body.address ||
+      !req.body.city ||
+      !req.body.country ||
+      !req.body.contact_name ||
+      !req.body.contact_position ||
+      !isPhoneValid(req.body.contact_phone) ||
+      !isEmailValid(req.body.contact_email)
+    ) {
+      return res
+        .status(400)
+        .send(
+          "Please make sure to provide warehouse_name, address, city, country, contact_name, contact_position, contact_phone and contact_email fields in a request"
+        );
+    }
   knex("warehouses")
     .update(req.body)
     .where({ id: req.params.id })
