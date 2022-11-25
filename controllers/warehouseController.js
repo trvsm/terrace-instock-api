@@ -34,10 +34,10 @@ exports.warehouseInventories = (req, res) => {
     .where({ warehouse_id: req.params.id })
     .then((data) => {
       res.status(200).json(data);
-      // console.log(res.status(200).json(data));
-      // res.status(200).json(data).length === 0
-      //   ? "no inventory in this warehouse"
-      //   : res.status(200).json(data);
+      console.log(res.status(200).json(data));
+      res.status(200).json(data).length === 0
+        ? "no inventory in this warehouse"
+        : res.status(200).json(data);
     })
     .catch((err) =>
       res
