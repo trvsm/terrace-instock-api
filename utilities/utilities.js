@@ -12,19 +12,20 @@ const updatedList = (items, request) => {
   });
 };
 
-// regular expression for phone validation
-  const phoneRegex = new RegExp(
-    `^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$`
-  );
+
   // regular expression for email validation
   const emailRegex = new RegExp(".+@.+..+");
 
   // check if phone value fits regular expression
   const isPhoneValid = (phone) => {
-    if (!phone.match(phoneRegex)) {
-      return false;
-    } else {
+    if (
+      phone.search(
+        /^[\+]?([0-9][\s]?|[0-9]?)([(][0-9]{3}[)][\s]?|[0-9]{3}[-\s\.]?)[0-9]{3}[-\s\.]?[0-9]{4,6}$/g
+      ) >-1
+    ) {
       return true;
+    } else {
+      return false;
     }
   };
 // check if phone value fits regular expression
