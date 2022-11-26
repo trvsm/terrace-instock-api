@@ -32,7 +32,6 @@ exports.singleInventory = (req, res) => {
     );
 };
 exports.addInventory = (req, res) => {
-  console.log(req.body);
   // Validate the request body for required data
   if (
     !req.body.item_name ||
