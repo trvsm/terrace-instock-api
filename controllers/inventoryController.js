@@ -3,6 +3,9 @@ const { v4: uuidv4 } = require("uuid");
 
 exports.index = (_req, res) => {
   knex("inventories")
+    .select("inventories.*")
+    .select("warehouses.warehouse_name")
+    .join("warehouses", "warehouses.id", "=", "inventories.warehouse_id")
     .then((data) => {
       res.status(200).json(data);
     })
@@ -29,7 +32,6 @@ exports.singleInventory = (req, res) => {
     );
 };
 exports.addInventory = (req, res) => {
-  console.log(req.body);
   // Validate the request body for required data
   if (
     !req.body.item_name ||
@@ -59,6 +61,20 @@ exports.addInventory = (req, res) => {
     .catch((err) => res.status(400).send(`Error creating inventory: ${err}`));
 };
 exports.updateInventory = (req, res) => {
+  if (
+    !req.body.item_name ||
+    !req.body.description ||
+    !req.body.category ||
+    !req.body.status ||
+    !req.body.quantity ||
+    !req.body.warehouse_id
+  ) {
+    return res
+      .status(400)
+      .send(
+        "Please make sure to provide item_name, description, category, status, and quantity fields in a request"
+      );
+  }
   knex("inventories")
     .update(req.body)
     .where({ id: req.params.id })
@@ -85,5 +101,28 @@ exports.deleteInventory = (req, res) => {
     })
     .catch((err) =>
       res.status(400).send(`Error deleting inventory ${req.params.id} ${err}`)
+    );
+};
+
+exports.warehouseName = (req, res) => {
+  knex
+    .select(
+      "inventories.id",
+      "inventories.warehouse_id",
+      "warehouses.id",
+      "warehouses.warehouse_name"
+    )
+    .from("inventories")
+    .innerJoin("warehouses", "inventories.warehouse_id", "=", "warehouses.id")
+    .where({ "inventories.id": req.params.id })
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) =>
+      res
+        .status(400)
+        .send(
+          `Error retrieving warehouse name for the inventory ${req.params.id} ${err}`
+        )
     );
 };
